@@ -1,4 +1,3 @@
-// Navbar scroll effect
 window.addEventListener('scroll', () => {
     const navbar = document.querySelector('.navbar');
     if (window.scrollY > 50) {
@@ -10,7 +9,6 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// Mobile menu toggle
 const hamburger = document.querySelector('.hamburger');
 const navMenu = document.querySelector('.nav-menu');
 
@@ -19,7 +17,6 @@ hamburger.addEventListener('click', () => {
     hamburger.classList.toggle('active');
 });
 
-// Close menu when clicking on a link
 document.querySelectorAll('.nav-menu a').forEach(link => {
     link.addEventListener('click', () => {
         navMenu.classList.remove('active');
@@ -27,7 +24,6 @@ document.querySelectorAll('.nav-menu a').forEach(link => {
     });
 });
 
-// Smooth scroll with offset
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
@@ -43,7 +39,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Counter animation
 const animateCounter = (element) => {
     const target = parseInt(element.getAttribute('data-target'));
     const duration = 2000;
@@ -63,7 +58,6 @@ const animateCounter = (element) => {
     updateCounter();
 };
 
-// Intersection Observer for animations
 const observerOptions = {
     threshold: 0.3,
     rootMargin: '0px 0px -100px 0px'
@@ -89,13 +83,11 @@ const observer = new IntersectionObserver((entries) => {
     });
 }, observerOptions);
 
-// Observe all animated elements
 document.addEventListener('DOMContentLoaded', () => {
     const animatedElements = document.querySelectorAll('.dish-card, .stat-item, .region-card');
     animatedElements.forEach(el => observer.observe(el));
 });
 
-// Parallax effect for hero section
 window.addEventListener('scroll', () => {
     const scrolled = window.pageYOffset;
     const hero = document.querySelector('.hero-content');
@@ -103,4 +95,40 @@ window.addEventListener('scroll', () => {
         hero.style.transform = `translateY(${scrolled * 0.5}px)`;
         hero.style.opacity = 1 - (scrolled / 500);
     }
+});
+
+document.querySelectorAll('.dish-card').forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+        card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+    });
+
+    card.addEventListener('mouseleave', () => {
+        card.style.setProperty('--mouse-x', '-999px');
+        card.style.setProperty('--mouse-y', '-999px');
+    });
+});
+
+const sections = document.querySelectorAll('section');
+let isScrolling = false;
+let currentSection = 0;
+
+window.addEventListener('wheel', (e) => {
+    if (isScrolling) return;
+
+    if (e.deltaY > 0 && currentSection < sections.length - 1) {
+        currentSection++;
+    } else if (e.deltaY < 0 && currentSection > 0) {
+        currentSection--;
+    } else {
+        return;
+    }
+
+    isScrolling = true;
+    sections[currentSection].scrollIntoView({ behavior: 'smooth' });
+
+    setTimeout(() => {
+        isScrolling = false;
+    }, 800);
 });
